@@ -16,8 +16,8 @@ export default function ChordDiagram({ chord }: { chord: Chord }) {
         .map(({ i }) => i)
     : [];
 
-  const barreStart = barreStrings.length ? Math.min(...barreStrings) : null;
-  const barreEnd = barreStrings.length ? Math.max(...barreStrings) : null;
+  const barreStart = chord.barreRange?.[0] ?? (barreStrings.length ? Math.min(...barreStrings) : null);
+const barreEnd = chord.barreRange?.[1] ?? (barreStrings.length ? Math.max(...barreStrings) : null);
 
   return (
     <svg viewBox="0 0 180 200" className="w-32 h-36">

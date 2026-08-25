@@ -8,7 +8,9 @@ export interface Chord{
     fingers?: number[];
     isBarre?: boolean;
     barreFret?: number;
+    barreRange?: [number, number];
     audioUrl?: string;
+
 }
 
 export interface GameAttempt{
