@@ -3,8 +3,8 @@ import {Chord} from "../lib/types"
 import ChordDiagram from './ChordDiagram'
 export default function ChordImage({chord}: {chord: Chord}){
   return (
-    <div>
-      <h4>{chord.family}</h4>
+    <div className="">
+      <h4>{chord.name}</h4>
       <ChordDiagram key={chord.id} chord={chord}/>
     </div>
   )

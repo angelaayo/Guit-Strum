@@ -20,7 +20,7 @@ export default function ChordDiagram({ chord }: { chord: Chord }) {
 const barreEnd = chord.barreRange?.[1] ?? (barreStrings.length ? Math.max(...barreStrings) : null);
 
   return (
-    <svg viewBox="0 0 180 200" className="w-32 h-36">
+    <svg viewBox="0 0 200 200" className="w-40 h-36 border-2 bg-[#F2EDE6]">
       {/* Nut */}
       <rect
         x={startX}

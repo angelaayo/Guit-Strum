@@ -63,3 +63,8 @@ export const chords: Chord[] = [
     frets: [-1, 2, 3, 4, 3, -1],
   },
 ];
+
+export function getRandomChord(): Chord{
+  const index = Math.floor(Math.random() * chords.length);
+  return chords[index]
+}
