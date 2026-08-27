@@ -1,2 +1,21 @@
 @import "tailwindcss";
 
+:root {
+  --color-bg: #fef9f2;
+  --color-card-bg: #f2ede6;
+  --color-primary: #7c5727; /* chord name / accent */
+  --color-primary-soft: #a8825a; /* lighter accent, hover states */
+  --color-border: #e3d9c9; /* subtle card border */
+  --color-string: #3a2e22; /* fretboard lines, darker than primary */
+  --color-dot: #7c5727; /* finger dots, match primary for cohesion */
+  --color-muted: #817569; /* muted string ✕, low-emphasis text */
+  --color-muted-string: #c1443a; /* red ✕ for muted strings */
+}
+
+@theme{
+  --font-source-serif: var(--font-source-serif-4)
+}
+
+body {
+  background-color: var(--color-bg);
+}

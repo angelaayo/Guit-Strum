@@ -1,5 +1,5 @@
 //mini game view
-import ChordImage from "../components/ChordImage";
+import ChordImage from "../components/ChordCard";
 import {chords} from "../lib/chords"
 
 
