@@ -1,4 +1,4 @@
-import { Chord } from "./types";
+import { Chord, GameMode } from "./types";
 
 export const chords: Chord[] = [
   {
@@ -64,7 +64,33 @@ export const chords: Chord[] = [
   },
 ];
 
-export function getRandomChord(): Chord{
+export function getRandomChord(): Chord {
   const index = Math.floor(Math.random() * chords.length);
-  return chords[index]
+  return chords[index];
+}
+
+export const gameModes: GameMode[] = [
+  {
+    id: "beginner",
+    label: "Beginner",
+    chords: chords.filter((c) => c.difficulty === "beginner"),
+  },
+  {
+    id: "intermediate-advanced",
+    label: "Intermediate / Advanced",
+    chords: chords.filter(
+      (c) => c.difficulty === "intermediate" || c.difficulty === "advanced",
+    ),
+  },
+  {
+    id: "all",
+    label: "All Chords",
+    chords: chords,
+  },
+];
+
+export function getModeById(id: string): GameMode {
+  const mode = gameModes.find((m) => m.id === id);
+  if (!mode) throw new Error(`Unknown game mode: ${id}`);
+  return mode;
 }

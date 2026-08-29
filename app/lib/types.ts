@@ -18,3 +18,10 @@ export interface GameAttempt{
     correct: boolean;
     timestamp: number;
 }
+
+export interface GameMode{
+    id: string;
+    label: string;
+    chords: Chord[];
+}
+

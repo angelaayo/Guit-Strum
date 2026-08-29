@@ -3,6 +3,7 @@
 :root {
   --color-bg: #fef9f2;
   --color-card-bg: #f2ede6;
+  --color-card-bg-harsh: #ead8c0;
   --color-primary: #7c5727; /* chord name / accent */
   --color-primary-soft: #a8825a; /* lighter accent, hover states */
   --color-border: #e3d9c9; /* subtle card border */
@@ -12,8 +13,9 @@
   --color-muted-string: #c1443a; /* red ✕ for muted strings */
 }
 
-@theme{
-  --font-source-serif: var(--font-source-serif-4)
+@theme {
+  --font-source-serif: var(--font-source-serif-4);
+  --font-inter: var(--font-inter);
 }
 
 body {
