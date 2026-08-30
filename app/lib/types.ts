@@ -19,9 +19,11 @@ export interface GameAttempt{
     timestamp: number;
 }
 
-export interface GameMode{
-    id: string;
-    label: string;
-    chords: Chord[];
+export interface GameMode {
+  id: string;
+  label: string;
+  tagline: string;
+  description: string;
+  chords: Chord[];
 }
 

@@ -64,33 +64,37 @@ export const chords: Chord[] = [
   },
 ];
 
-export function getRandomChord(): Chord {
-  const index = Math.floor(Math.random() * chords.length);
-  return chords[index];
+export function getRandomChord(pool: Chord[] = chords, exclude?: string): Chord {
+  const options = exclude ? pool.filter((c) => c.id!== exclude): pool;
+  const source = options.length ? options : pool;
+  const index = Math.floor(Math.random() * source.length);
+  return source[index];
 }
 
 export const gameModes: GameMode[] = [
   {
     id: "beginner",
     label: "Beginner",
+    tagline: "Open chords & simple rhythms",
+    description: "Master the basics with fundamental shapes and a relaxed tempo. Perfect for building a foundation.",
     chords: chords.filter((c) => c.difficulty === "beginner"),
   },
   {
     id: "intermediate-advanced",
     label: "Intermediate / Advanced",
-    chords: chords.filter(
-      (c) => c.difficulty === "intermediate" || c.difficulty === "advanced",
-    ),
+    tagline: "Barre chords & tricky shapes",
+    description: "Push into barre chords and less common voicings. For players ready for a real challenge.",
+    chords: chords.filter((c) => c.difficulty === "intermediate" || c.difficulty === "advanced"),
   },
   {
     id: "all",
     label: "All Chords",
+    tagline: "The full library, fully random",
+    description: "No filters — every chord in the library is fair game, from open shapes to barres.",
     chords: chords,
   },
 ];
 
-export function getModeById(id: string): GameMode {
-  const mode = gameModes.find((m) => m.id === id);
-  if (!mode) throw new Error(`Unknown game mode: ${id}`);
-  return mode;
+export function getModeById(id: string): GameMode | undefined {
+  return gameModes.find((m) => m.id === id);
 }
