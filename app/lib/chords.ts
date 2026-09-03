@@ -29,7 +29,7 @@ export const chords: Chord[] = [
     name: "C Major",
     family: "C",
     difficulty: "beginner",
-    frets: [3, 2, 0, 0, 0, 3],
+    frets: [-1, 3, 2, 0, 1, 0],
   },
   {
     id: "f-major-barre",
@@ -64,8 +64,11 @@ export const chords: Chord[] = [
   },
 ];
 
-export function getRandomChord(pool: Chord[] = chords, exclude?: string): Chord {
-  const options = exclude ? pool.filter((c) => c.id!== exclude): pool;
+export function getRandomChord(
+  pool: Chord[] = chords,
+  exclude?: string,
+): Chord {
+  const options = exclude ? pool.filter((c) => c.id !== exclude) : pool;
   const source = options.length ? options : pool;
   const index = Math.floor(Math.random() * source.length);
   return source[index];
@@ -76,21 +79,26 @@ export const gameModes: GameMode[] = [
     id: "beginner",
     label: "Beginner",
     tagline: "Open chords & simple rhythms",
-    description: "Master the basics with fundamental shapes and a relaxed tempo. Perfect for building a foundation.",
+    description:
+      "Master the basics with fundamental shapes and a relaxed tempo. Perfect for building a foundation.",
     chords: chords.filter((c) => c.difficulty === "beginner"),
   },
   {
     id: "intermediate-advanced",
     label: "Intermediate / Advanced",
     tagline: "Barre chords & tricky shapes",
-    description: "Push into barre chords and less common voicings. For players ready for a real challenge.",
-    chords: chords.filter((c) => c.difficulty === "intermediate" || c.difficulty === "advanced"),
+    description:
+      "Push into barre chords and less common voicings. For players ready for a real challenge.",
+    chords: chords.filter(
+      (c) => c.difficulty === "intermediate" || c.difficulty === "advanced",
+    ),
   },
   {
     id: "all",
     label: "All Chords",
     tagline: "The full library, fully random",
-    description: "No filters — every chord in the library is fair game, from open shapes to barres.",
+    description:
+      "No filters — every chord in the library is fair game, from open shapes to barres.",
     chords: chords,
   },
 ];

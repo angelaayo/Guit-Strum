@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -63,6 +62,7 @@ export default function LiveMicStream({
       wsRef.current?.close();
       audioContextRef.current?.close();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
