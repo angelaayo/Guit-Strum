@@ -29,11 +29,11 @@ const GameHeader = ({ currentScore }: { currentScore: number }) => {
           </span>
         </div>
         <div
-          className="font-semibold text-xl"
+          className="font-semibold text-xl flex gap-2"
           style={{ color: "var(--color-primary)" }}
         >
-          <span>SCORE: {currentScore} </span>
-          <span>0</span>
+          <span>SCORE:</span>
+          <span>{currentScore}</span>
         </div>
       </div>
     </div>
