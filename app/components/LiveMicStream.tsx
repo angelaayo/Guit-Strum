@@ -22,10 +22,17 @@ export default function LiveMicStream({
         if (data.detectedChord) onPrediction(data.detectedChord);
       };
 
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: false,
+        },
+      });
       if (cancelled) return;
 
       const audioContext = new AudioContext();
+      console.log("Live sample rate:", audioContext.sampleRate);
       audioContextRef.current = audioContext;
       await audioContext.audioWorklet.addModule("/audio-processor.js");
 
