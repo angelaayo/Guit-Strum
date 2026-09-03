@@ -1,6 +1,6 @@
 import React from "react";
 
-const GameHeader = () => {
+const GameHeader = ({currentScore}: {currentScore: number}) => {
   return (
     <div
       className="border-b-2 flex justify-between p-3 items-center font-source-serif"
@@ -29,7 +29,7 @@ const GameHeader = () => {
           </span>
         </div>
         <div className="font-semibold text-xl" style={{ color: "var(--color-primary)" }}>
-          <span>SCORE: </span>
+          <span>SCORE: {currentScore} </span>
           <span>0</span>
         </div>
       </div>
