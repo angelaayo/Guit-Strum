@@ -5,6 +5,7 @@ A web app that helps guitar players practice chords through a real-time recognit
 Status: actively in development. Core chord recognition pipeline is live and working end-to-end (browser mic → live audio stream → ML classification → real-time feedback). Cloud deployment, chord library UI, and account/progress tracking are in progress.
 
 What's working right now
+
 🎤 Live chord recognition — streams raw audio from the browser via the Web Audio API over a WebSocket connection to a Python backend
 
 🧠 Custom-trained ML model — an SVM classifier trained on melspectrogram features from real guitar recordings, served through a FastAPI microservice
