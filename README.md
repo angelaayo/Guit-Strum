@@ -6,9 +6,13 @@ Status: actively in development. Core chord recognition pipeline is live and wor
 
 What's working right now
 🎤 Live chord recognition — streams raw audio from the browser via the Web Audio API over a WebSocket connection to a Python backend
+
 🧠 Custom-trained ML model — an SVM classifier trained on melspectrogram features from real guitar recordings, served through a FastAPI microservice
+
 🎯 "Play the Chord" mini-game loop — a target chord is shown on screen, the app listens continuously, and correctly matching the chord advances you to the next one
+
 🃏 Chord diagrams — data-driven SVG fretboard diagrams (including barre chord rendering) generated from a typed chord dataset, no static images
+
 🗄️ Postgres + Prisma — chord data is served from a real database rather than hardcoded, with mode-based filtering (Beginner / Intermediate-Advanced / All)
 Tech stack
 
