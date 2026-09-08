@@ -29,6 +29,8 @@ Cloud deployment (FastAPI recognizer + Next.js app)
 Full chord library with browsing/detail pages
 Account creation + persistent progress tracking across sessions
 Song recommendations based on chord strength/mastery
+
+
 Running it locally
 bash
 npm install
