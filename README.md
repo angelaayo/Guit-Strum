@@ -31,10 +31,11 @@ Account creation + persistent progress tracking across sessions
 Song recommendations based on chord strength/mastery
 
 
-Running it locally
-bash
+**Running it locally**
+```bash
 npm install
 npm run dev
+```
 
 Open http://localhost:3000 to view it. The recognition service (/guitstrum-recognizer) runs separately via uvicorn main:app --reload — see that folder's setup for details.
 
