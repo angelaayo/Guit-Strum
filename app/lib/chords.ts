@@ -1,13 +1,7 @@
 import { GameMode } from "./types";
 import type { Chord } from "@/app/generated/prisma/client";
-import { getAllChords } from "@/app/lib/chord-queries";
 
-const chords = await getAllChords();
-
-export function getRandomChord(
-  pool: Chord[] = chords,
-  exclude?: string,
-): Chord {
+export function getRandomChord(pool: Chord[], exclude?: string): Chord {
   const options = exclude ? pool.filter((c) => c.id !== exclude) : pool;
   const source = options.length ? options : pool;
   const index = Math.floor(Math.random() * source.length);

@@ -2,8 +2,10 @@
 import React from "react";
 import Link from "next/link";
 import { GameMode } from "../lib/types";
+import { getChordsForMode } from "../lib/chord-queries";
 
-const ModeCard = ({ mode }: { mode: GameMode }) => {
+const ModeCard = async ({ mode }: { mode: GameMode }) => {
+  const modeChords = await getChordsForMode(mode);
   return (
     <Link
       href={`/play/${mode.id}`}
@@ -40,7 +42,7 @@ const ModeCard = ({ mode }: { mode: GameMode }) => {
           className="font-inter text-xs tracking-wide"
           style={{ color: "var(--color-muted)" }}
         >
-          {mode.chords.length} chords
+          {modeChords.length} chords
         </span>
         <span
           className="font-source-serif font-semibold tracking-wide px-4 py-2 rounded-lg border

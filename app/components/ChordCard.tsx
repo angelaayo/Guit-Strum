@@ -1,5 +1,5 @@
-import React from "react";
-import { Chord } from "../lib/types";
+
+import { Chord } from "@/app/generated/prisma/client";
 import ChordDiagram from "./ChordDiagram";
 
 export default function ChordCard({ chord }: { chord: Chord }) {

@@ -1,16 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Chord, GameMode } from "@/app/lib/types";
+import type { Chord } from "@/app/generated/prisma/client";
 import { getRandomChord } from "@/app/lib/chords";
 import ChordCard from "@/app/components/ChordCard";
 import LiveMicStream from "@/app/components/LiveMicStream";
 import GameHeader from "@/app/components/GameHeader";
 import GameFooter from "@/app/components/GameFooter";
 
-export default function PlayModeContent({ mode }: { mode: GameMode }) {
+export default function PlayModeContent({
+  modeChords,
+}: {
+  modeChords: Chord[];
+}) {
   const [currentChord, setCurrentChord] = useState<Chord>(() =>
-    getRandomChord(mode.chords),
+    getRandomChord(modeChords),
   );
   const [score, setScore] = useState(0);
   const [sessionStarted, setSessionStarted] = useState(false);
@@ -36,7 +40,7 @@ export default function PlayModeContent({ mode }: { mode: GameMode }) {
   }, []); // runs once for the whole session, not per-chord
 
   function nextChord() {
-    setCurrentChord((prev) => getRandomChord(mode.chords, prev?.id));
+    setCurrentChord((prev) => getRandomChord(modeChords, prev?.id));
   }
 
   function handlePrediction(detectedChord: string) {
