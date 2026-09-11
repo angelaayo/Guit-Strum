@@ -8,6 +8,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Mail, Lock, User } from "lucide-react";
 import MusicIconOrbit from "@/app/components/MusicIconOrbit";
+import FormField from "@/app/components/FormField";
 
 const features = [
   "Live chord recognition — play a real chord, get instant feedback through your mic",
@@ -45,10 +46,10 @@ export default function SignupPage() {
       className="min-h-screen w-full flex flex-col lg:flex-row"
       style={{ backgroundColor: "var(--color-bg)" }}
     >
-      {/* Left panel — icon mark + pitch */}
+      {/* Left panel — icon mark + pitch, on the page background */}
       <div className="lg:w-1/2 relative flex flex-col items-center justify-center px-6 py-16 sm:px-8">
         <Link
-          href="/"
+          href="/play"
           className="absolute top-6 left-6 font-inter text-sm"
           style={{ color: "var(--color-muted)" }}
         >
@@ -87,23 +88,20 @@ export default function SignupPage() {
         </div>
       </div>
 
-      {/* Right panel — form */}
-      <div className="lg:w-1/2 flex items-center justify-center px-4 py-10 sm:px-6">
-        <div
-          className="w-full max-w-sm rounded-2xl border p-6 sm:p-8"
-          style={{
-            backgroundColor: "var(--color-card-bg)",
-            borderColor: "var(--color-border)",
-          }}
-        >
+      {/* Right panel — now a full filled panel, not a small floating card */}
+      <div
+        className="lg:w-1/2 flex items-center justify-center px-6 py-16 sm:px-8 lg:p-16"
+        style={{ backgroundColor: "var(--color-card-bg)" }}
+      >
+        <div className="w-full max-w-md">
           <h2
-            className="font-source-serif text-2xl font-semibold mb-1"
+            className="font-source-serif text-3xl font-semibold mb-2"
             style={{ color: "var(--color-primary)" }}
           >
             Create your account
           </h2>
           <p
-            className="font-inter text-sm mb-6"
+            className="font-inter text-sm mb-8"
             style={{ color: "var(--color-muted)" }}
           >
             Free, and takes about a minute.
@@ -113,89 +111,30 @@ export default function SignupPage() {
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-4"
           >
-            <div>
-              <div className="relative">
-                <User
-                  size={16}
-                  className="absolute left-4 top-1/2 -translate-y-1/2"
-                  style={{ color: "var(--color-muted)" }}
-                />
-                <input
-                  {...register("displayName")}
-                  type="text"
-                  placeholder="Display name"
-                  className="gs-input w-full border rounded-xl pl-11 pr-4 py-3 font-inter text-sm"
-                  style={{
-                    borderColor: "var(--color-border)",
-                    backgroundColor: "var(--color-bg)",
-                  }}
-                />
-              </div>
-              {errors.displayName && (
-                <p
-                  className="font-inter text-xs mt-1"
-                  style={{ color: "var(--color-muted-string)" }}
-                >
-                  {errors.displayName.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <div className="relative">
-                <Mail
-                  size={16}
-                  className="absolute left-4 top-1/2 -translate-y-1/2"
-                  style={{ color: "var(--color-muted)" }}
-                />
-                <input
-                  {...register("email")}
-                  type="email"
-                  placeholder="Email"
-                  className="gs-input w-full border rounded-xl pl-11 pr-4 py-3 font-inter text-sm"
-                  style={{
-                    borderColor: "var(--color-border)",
-                    backgroundColor: "var(--color-bg)",
-                  }}
-                />
-              </div>
-              {errors.email && (
-                <p
-                  className="font-inter text-xs mt-1"
-                  style={{ color: "var(--color-muted-string)" }}
-                >
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <div className="relative">
-                <Lock
-                  size={16}
-                  className="absolute left-4 top-1/2 -translate-y-1/2"
-                  style={{ color: "var(--color-muted)" }}
-                />
-                <input
-                  {...register("password")}
-                  type="password"
-                  placeholder="Password"
-                  className="gs-input w-full border rounded-xl pl-11 pr-4 py-3 font-inter text-sm"
-                  style={{
-                    borderColor: "var(--color-border)",
-                    backgroundColor: "var(--color-bg)",
-                  }}
-                />
-              </div>
-              {errors.password && (
-                <p
-                  className="font-inter text-xs mt-1"
-                  style={{ color: "var(--color-muted-string)" }}
-                >
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
+            <FormField
+              label="Display name"
+              icon={User}
+              type="text"
+              placeholder="What should we call you?"
+              registration={register("displayName")}
+              error={errors.displayName?.message}
+            />
+            <FormField
+              label="Email"
+              icon={Mail}
+              type="email"
+              placeholder="you@example.com"
+              registration={register("email")}
+              error={errors.email?.message}
+            />
+            <FormField
+              label="Password"
+              icon={Lock}
+              type="password"
+              placeholder="At least 8 characters"
+              registration={register("password")}
+              error={errors.password?.message}
+            />
 
             {serverError && (
               <p
@@ -209,7 +148,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="gs-button font-source-serif font-semibold rounded-xl px-4 py-3 mt-2"
+              className="gs-button font-source-serif font-semibold rounded-xl px-4 py-3.5 mt-2"
               style={{
                 backgroundColor: "var(--color-primary)",
                 color: "var(--color-bg)",

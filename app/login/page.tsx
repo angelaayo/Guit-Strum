@@ -8,6 +8,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Mail, Lock } from "lucide-react";
 import MusicIconOrbit from "@/app/components/MusicIconOrbit";
+import FormField from "@/app/components/FormField";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -36,23 +37,32 @@ export default function LoginPage() {
 
   return (
     <div
-      className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-12"
+      className="relative min-h-screen w-full flex flex-col items-center justify-center px-4 py-12 overflow-hidden"
       style={{ backgroundColor: "var(--color-bg)" }}
     >
+      {/* decorative background rings, echoing the orbit motif at scale */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div
+          className="w-[560px] h-[560px] rounded-full border border-dashed"
+          style={{ borderColor: "var(--color-border)", opacity: 0.5 }}
+        />
+        <div
+          className="absolute w-[380px] h-[380px] rounded-full border border-dashed"
+          style={{ borderColor: "var(--color-border)", opacity: 0.7 }}
+        />
+      </div>
+
       <Link
-        href="/"
-        className="absolute top-6 left-6 font-inter text-sm"
+        href="/play"
+        className="absolute top-6 left-6 font-inter text-sm z-10"
         style={{ color: "var(--color-muted)" }}
       >
         ← Back to GuitStrum
       </Link>
 
       <div
-        className="w-full max-w-sm rounded-2xl border p-6 sm:p-8 flex flex-col items-center gap-6"
-        style={{
-          backgroundColor: "var(--color-card-bg)",
-          borderColor: "var(--color-border)",
-        }}
+        className="relative z-10 w-full max-w-md rounded-2xl border p-8 sm:p-10 flex flex-col items-center gap-6 shadow-sm"
+        style={{ backgroundColor: "var(--color-card-bg)", borderColor: "var(--color-border)" }}
       >
         <MusicIconOrbit size="sm" />
 
@@ -63,79 +73,31 @@ export default function LoginPage() {
           >
             Welcome back
           </h1>
-          <p
-            className="font-inter text-sm mt-2"
-            style={{ color: "var(--color-muted)" }}
-          >
+          <p className="font-inter text-sm mt-2" style={{ color: "var(--color-muted)" }}>
             Pick up your practice where you left off.
           </p>
         </div>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="w-full flex flex-col gap-4"
-        >
-          <div>
-            <div className="relative">
-              <Mail
-                size={16}
-                className="absolute left-4 top-1/2 -translate-y-1/2"
-                style={{ color: "var(--color-muted)" }}
-              />
-              <input
-                {...register("email")}
-                type="email"
-                placeholder="Email"
-                className="gs-input w-full border rounded-xl pl-11 pr-4 py-3 font-inter text-sm"
-                style={{
-                  borderColor: "var(--color-border)",
-                  backgroundColor: "var(--color-bg)",
-                }}
-              />
-            </div>
-            {errors.email && (
-              <p
-                className="font-inter text-xs mt-1"
-                style={{ color: "var(--color-muted-string)" }}
-              >
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <div className="relative">
-              <Lock
-                size={16}
-                className="absolute left-4 top-1/2 -translate-y-1/2"
-                style={{ color: "var(--color-muted)" }}
-              />
-              <input
-                {...register("password")}
-                type="password"
-                placeholder="Password"
-                className="gs-input w-full border rounded-xl pl-11 pr-4 py-3 font-inter text-sm"
-                style={{
-                  borderColor: "var(--color-border)",
-                  backgroundColor: "var(--color-bg)",
-                }}
-              />
-            </div>
-            {errors.password && (
-              <p
-                className="font-inter text-xs mt-1"
-                style={{ color: "var(--color-muted-string)" }}
-              >
-                {errors.password.message}
-              </p>
-            )}
-          </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-4">
+          <FormField
+            label="Email"
+            icon={Mail}
+            type="email"
+            placeholder="you@example.com"
+            registration={register("email")}
+            error={errors.email?.message}
+          />
+          <FormField
+            label="Password"
+            icon={Lock}
+            type="password"
+            placeholder="••••••••"
+            registration={register("password")}
+            error={errors.password?.message}
+          />
 
           {serverError && (
-            <p
-              className="font-inter text-xs"
-              style={{ color: "var(--color-muted-string)" }}
-            >
+            <p className="font-inter text-xs" style={{ color: "var(--color-muted-string)" }}>
               {serverError}
             </p>
           )}
@@ -143,26 +105,16 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="gs-button font-source-serif font-semibold rounded-xl px-4 py-3 mt-2"
-            style={{
-              backgroundColor: "var(--color-primary)",
-              color: "var(--color-bg)",
-            }}
+            className="gs-button font-source-serif font-semibold rounded-xl px-4 py-3.5 mt-2"
+            style={{ backgroundColor: "var(--color-primary)", color: "var(--color-bg)" }}
           >
             {isSubmitting ? "Logging in..." : "Log In"}
           </button>
         </form>
 
-        <p
-          className="font-inter text-sm"
-          style={{ color: "var(--color-muted)" }}
-        >
+        <p className="font-inter text-sm" style={{ color: "var(--color-muted)" }}>
           No account?{" "}
-          <Link
-            href="/signup"
-            className="font-semibold"
-            style={{ color: "var(--color-primary)" }}
-          >
+          <Link href="/signup" className="font-semibold" style={{ color: "var(--color-primary)" }}>
             Create one
           </Link>
         </p>
