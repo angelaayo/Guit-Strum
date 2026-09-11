@@ -5,10 +5,15 @@ A web app that helps guitar players practice chords through a real-time recognit
 Status: actively in development. Core chord recognition pipeline is live and working end-to-end (browser mic → live audio stream → ML classification → real-time feedback). Cloud deployment, chord library UI, and account/progress tracking are in progress.
 
 What's working right now
+
 🎤 Live chord recognition — streams raw audio from the browser via the Web Audio API over a WebSocket connection to a Python backend
+
 🧠 Custom-trained ML model — an SVM classifier trained on melspectrogram features from real guitar recordings, served through a FastAPI microservice
+
 🎯 "Play the Chord" mini-game loop — a target chord is shown on screen, the app listens continuously, and correctly matching the chord advances you to the next one
+
 🃏 Chord diagrams — data-driven SVG fretboard diagrams (including barre chord rendering) generated from a typed chord dataset, no static images
+
 🗄️ Postgres + Prisma — chord data is served from a real database rather than hardcoded, with mode-based filtering (Beginner / Intermediate-Advanced / All)
 Tech stack
 
@@ -24,10 +29,13 @@ Cloud deployment (FastAPI recognizer + Next.js app)
 Full chord library with browsing/detail pages
 Account creation + persistent progress tracking across sessions
 Song recommendations based on chord strength/mastery
-Running it locally
-bash
+
+
+**Running it locally**
+```bash
 npm install
 npm run dev
+```
 
 Open http://localhost:3000 to view it. The recognition service (/guitstrum-recognizer) runs separately via uvicorn main:app --reload — see that folder's setup for details.
 
