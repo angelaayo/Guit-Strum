@@ -5,7 +5,7 @@ import { jwtVerify } from "jose";
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 const PUBLIC_PATHS = ["/play", "/login", "/signup"];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const isPublic = PUBLIC_PATHS.some(
@@ -21,7 +21,8 @@ export async function middleware(request: NextRequest) {
   try {
     await jwtVerify(token, secret);
     return NextResponse.next();
-  } catch {
+  } catch (err) {
+    console.error("Token verification failed:", err);
     return NextResponse.redirect(new URL("/play", request.url));
   }
 }

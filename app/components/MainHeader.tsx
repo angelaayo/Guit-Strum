@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuCheckboxItem,
+  DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { useAuth, useSettings } from "@/app/lib/providers";
 
@@ -52,7 +53,9 @@ const MainHeader = () => {
         <DropdownMenuContent className="w-56">
           {user ? (
             <>
-              <DropdownMenuLabel>{user.displayName}</DropdownMenuLabel>
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>{user.displayName}</DropdownMenuLabel>
+              </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem render={<Link href="/">Your Progress</Link>} />
               <DropdownMenuItem

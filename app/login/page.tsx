@@ -33,6 +33,7 @@ export default function LoginPage() {
       return;
     }
     router.push("/");
+    router.refresh();
   }
 
   return (
@@ -62,7 +63,10 @@ export default function LoginPage() {
 
       <div
         className="relative z-10 w-full max-w-md rounded-2xl border p-8 sm:p-10 flex flex-col items-center gap-6 shadow-sm"
-        style={{ backgroundColor: "var(--color-card-bg)", borderColor: "var(--color-border)" }}
+        style={{
+          backgroundColor: "var(--color-card-bg)",
+          borderColor: "var(--color-border)",
+        }}
       >
         <MusicIconOrbit size="sm" />
 
@@ -73,12 +77,18 @@ export default function LoginPage() {
           >
             Welcome back
           </h1>
-          <p className="font-inter text-sm mt-2" style={{ color: "var(--color-muted)" }}>
+          <p
+            className="font-inter text-sm mt-2"
+            style={{ color: "var(--color-muted)" }}
+          >
             Pick up your practice where you left off.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-full flex flex-col gap-4"
+        >
           <FormField
             label="Email"
             icon={Mail}
@@ -97,7 +107,10 @@ export default function LoginPage() {
           />
 
           {serverError && (
-            <p className="font-inter text-xs" style={{ color: "var(--color-muted-string)" }}>
+            <p
+              className="font-inter text-xs"
+              style={{ color: "var(--color-muted-string)" }}
+            >
               {serverError}
             </p>
           )}
@@ -106,15 +119,25 @@ export default function LoginPage() {
             type="submit"
             disabled={isSubmitting}
             className="gs-button font-source-serif font-semibold rounded-xl px-4 py-3.5 mt-2"
-            style={{ backgroundColor: "var(--color-primary)", color: "var(--color-bg)" }}
+            style={{
+              backgroundColor: "var(--color-primary)",
+              color: "var(--color-bg)",
+            }}
           >
             {isSubmitting ? "Logging in..." : "Log In"}
           </button>
         </form>
 
-        <p className="font-inter text-sm" style={{ color: "var(--color-muted)" }}>
+        <p
+          className="font-inter text-sm"
+          style={{ color: "var(--color-muted)" }}
+        >
           No account?{" "}
-          <Link href="/signup" className="font-semibold" style={{ color: "var(--color-primary)" }}>
+          <Link
+            href="/signup"
+            className="font-semibold"
+            style={{ color: "var(--color-primary)" }}
+          >
             Create one
           </Link>
         </p>
