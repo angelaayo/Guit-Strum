@@ -7,6 +7,7 @@ import ChordCard from "@/app/components/ChordCard";
 import LiveMicStream from "@/app/components/LiveMicStream";
 import GameHeader from "@/app/components/GameHeader";
 import GameFooter from "@/app/components/GameFooter";
+import { recordAttempt } from "../lib/record-attempt";
 
 export default function PlayModeContent({
   modeChords,
@@ -44,7 +45,9 @@ export default function PlayModeContent({
   }
 
   function handlePrediction(detectedChord: string) {
-    if (detectedChord === currentChord.family) {
+    const correct = detectedChord === currentChord.family;
+    recordAttempt(currentChord.id, correct);
+    if (correct) {
       setScore((s) => s + 1);
       nextChord();
     }

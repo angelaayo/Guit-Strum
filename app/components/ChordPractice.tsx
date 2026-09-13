@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Chord } from "@/app/generated/prisma/client";
 import LiveMicStream from "@/app/components/LiveMicStream";
 import { Mic } from "lucide-react";
+import { recordAttempt } from "../lib/record-attempt";
 
 export default function ChordPractice({ chord }: { chord: Chord }) {
   const [practicing, setPracticing] = useState(false);
@@ -13,12 +14,14 @@ export default function ChordPractice({ chord }: { chord: Chord }) {
   const [streak, setStreak] = useState(0);
 
   function handlePrediction(detected: string) {
-    if (detected === chord.family) {
+    const correct = detected === chord.family;
+    if (correct) {
       setFeedback("correct");
       setStreak((s) => s + 1);
     } else {
       setFeedback("incorrect");
     }
+    recordAttempt(chord.id, correct);
   }
 
   if (!practicing) {
