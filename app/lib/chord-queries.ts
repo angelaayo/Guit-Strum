@@ -18,3 +18,9 @@ export async function getChordsForMode(mode: GameMode) {
 export async function getChordById(id: string) {
   return prisma.chord.findUnique({ where: { id } });
 }
+
+export async function getMasteryForUser(userId: string, chordId: string) {
+  return prisma.chordMastery.findUnique({
+    where: { userId_chordId: { userId, chordId } },
+  });
+}

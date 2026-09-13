@@ -1,4 +1,3 @@
-
 import { Chord } from "@/app/generated/prisma/client";
 import ChordDiagram from "./ChordDiagram";
 
