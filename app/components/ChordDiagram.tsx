@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import type { Chord } from "@/app/generated/prisma/client";
 import { useSettings } from "@/app/lib/providers";
 

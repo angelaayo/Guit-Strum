@@ -14,3 +14,7 @@ export async function getChordsForMode(mode: GameMode) {
       : undefined,
   });
 }
+
+export async function getChordById(id: string) {
+  return prisma.chord.findUnique({ where: { id } });
+}
