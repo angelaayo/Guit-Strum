@@ -24,3 +24,12 @@ export async function getMasteryForUser(userId: string, chordId: string) {
     where: { userId_chordId: { userId, chordId } },
   });
 }
+
+export async function getUserProgress(userId: string) {
+  return prisma.chord.findMany({
+    include: {
+      mastery: { where: { userId } },
+    },
+    orderBy: { name: "asc" },
+  });
+}
