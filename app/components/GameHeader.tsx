@@ -4,7 +4,13 @@ import React from "react";
 import Link from "next/link";
 import { useAuth } from "@/app/lib/providers";
 
-const GameHeader = ({ currentScore }: { currentScore: number }) => {
+const GameHeader = ({
+  currentScore,
+  streak,
+}: {
+  currentScore: number;
+  streak: number;
+}) => {
   const user = useAuth();
 
   return (
@@ -29,6 +35,14 @@ const GameHeader = ({ currentScore }: { currentScore: number }) => {
           <span>SCORE:</span>
           <span>{currentScore}</span>
         </div>
+        {streak > 1 && (
+          <div
+            className="font-semibold text-sm flex gap-1 items-center"
+            style={{ color: "var(--color-primary-soft)" }}
+          >
+            🔥<span>{streak}</span>
+          </div>
+        )}
       </div>
     </div>
   );

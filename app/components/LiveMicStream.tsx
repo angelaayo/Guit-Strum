@@ -14,6 +14,7 @@ export default function LiveMicStream({
   );
   const [errorMessage, setErrorMessage] = useState("");
   const [attempt, setAttempt] = useState(0);
+  const [lastConfidence, setLastConfidence] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -35,8 +36,10 @@ export default function LiveMicStream({
 
         ws.onmessage = (event) => {
           const data = JSON.parse(event.data);
-          if (data.detectedChord)
+          if (data.detectedChord) {
+            setLastConfidence(data.confidence);
             onPrediction(data.detectedChord, data.confidence);
+          }
         };
 
         ws.onerror = () => {
@@ -124,8 +127,18 @@ export default function LiveMicStream({
   }
 
   return (
-    <p className="font-inter text-sm" style={{ color: "var(--color-muted)" }}>
-      {status === "connecting" ? "Connecting..." : "Listening..."}
-    </p>
+    <div className="flex flex-col items-center gap-1">
+      <p className="font-inter text-sm" style={{ color: "var(--color-muted)" }}>
+        {status === "connecting" ? "Connecting..." : "Listening..."}
+      </p>
+      {status === "listening" && lastConfidence !== null && (
+        <p
+          className="font-inter text-xs"
+          style={{ color: "var(--color-muted)" }}
+        >
+          Last heard: {Math.round(lastConfidence * 100)}% confident
+        </p>
+      )}
+    </div>
   );
 }

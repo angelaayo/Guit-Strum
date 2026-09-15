@@ -5,9 +5,7 @@ import { getCurrentUser } from "../lib/auth";
 import LockedFeature from "@/app/components/LockedFeature";
 
 export default async function LibraryPage() {
-  const chords = await getAllChords();
   const user = await getCurrentUser();
-
   if (!user) {
     return (
       <div>
@@ -19,6 +17,7 @@ export default async function LibraryPage() {
       </div>
     );
   }
+  const chords = await getAllChords();
 
   return (
     <div>

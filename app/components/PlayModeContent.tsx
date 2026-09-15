@@ -5,12 +5,12 @@ import { getRandomChord } from "@/app/lib/chords";
 import ChordCard from "@/app/components/ChordCard";
 import LiveMicStream from "@/app/components/LiveMicStream";
 import GameHeader from "@/app/components/GameHeader";
-import GameFooter from "@/app/components/GameFooter";
 import { recordAttempt } from "../lib/record-attempt";
 import {
   CORRECT_CONFIDENCE_THRESHOLD,
   INCORRECT_CONFIDENCE_THRESHOLD,
 } from "../lib/recognition-config";
+import { useGameSession } from "../lib/providers";
 
 const QUEUE_SIZE = 3;
 
@@ -43,6 +43,21 @@ export default function PlayModeContent({
   const [score, setScore] = useState(0);
   const [sessionStarted, setSessionStarted] = useState(false);
   const [countdownValue, setCountdownValue] = useState(3);
+  const [streak, setStreak] = useState(0);
+  const { setInSession } = useGameSession();
+
+  useEffect(() => {
+    setInSession(sessionStarted);
+    return () => setInSession(false);
+  }, [sessionStarted, setInSession]);
+
+  useEffect(() => {
+    function handleBeforeUnload(e: BeforeUnloadEvent) {
+      if (sessionStarted) e.preventDefault();
+    }
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [sessionStarted]);
 
   useEffect(() => {
     let cancelled = false;
@@ -78,15 +93,17 @@ export default function PlayModeContent({
     if (isTarget && confidence >= CORRECT_CONFIDENCE_THRESHOLD) {
       recordAttempt(game.current.id, true);
       setScore((s) => s + 1);
+      setStreak((s) => s + 1);
       nextChord();
     } else if (confidence >= INCORRECT_CONFIDENCE_THRESHOLD) {
+      setStreak(0);
       recordAttempt(game.current.id, false);
     }
   }
 
   return (
     <div className="min-h-screen w-full flex flex-col">
-      <GameHeader currentScore={score} />
+      <GameHeader currentScore={score} streak={streak} />
       <main className="flex-1 mt-16">
         <div className="flex">
           <div className="flex-1" />
@@ -156,8 +173,6 @@ export default function PlayModeContent({
           </div>
         </div>
       </main>
-
-      <GameFooter />
     </div>
   );
 }

@@ -25,6 +25,7 @@ export default function ChordPractice({ chord }: { chord: Chord }) {
       setStreak((s) => s + 1);
       recordAttempt(chord.id, true);
     } else if (confidence >= INCORRECT_CONFIDENCE_THRESHOLD) {
+      setStreak(0);
       recordAttempt(chord.id, false);
       setFeedback("incorrect");
     }

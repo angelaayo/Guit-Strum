@@ -37,6 +37,20 @@ export function useSettings() {
   return ctx;
 }
 
+const GameSessionContext = createContext<
+  | {
+      inSession: boolean;
+      setInSession: (v: boolean) => void;
+    }
+  | undefined
+>(undefined);
+
+export function useGameSession() {
+  const ctx = useContext(GameSessionContext);
+  if (!ctx) throw new Error("useGameSession must be used within Providers");
+  return ctx;
+}
+
 const STORAGE_KEY = "guitstrum-settings";
 
 export function Providers({
@@ -50,6 +64,7 @@ export function Providers({
     user?.handedness ?? "right",
   );
   const [loaded, setLoaded] = useState(!!user); // logged-in users are already correct, nothing to wait for
+  const [inSession, setInSession] = useState(false);
 
   useEffect(() => {
     if (user) return; // state already correct from the initializer above — nothing to sync
@@ -90,7 +105,9 @@ export function Providers({
   return (
     <AuthContext.Provider value={user}>
       <SettingsContext.Provider value={{ handedness, setHandedness }}>
-        {children}
+        <GameSessionContext.Provider value={{ inSession, setInSession }}>
+          {children}
+        </GameSessionContext.Provider>
       </SettingsContext.Provider>
     </AuthContext.Provider>
   );

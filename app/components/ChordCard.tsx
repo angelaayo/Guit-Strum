@@ -17,13 +17,13 @@ export default function ChordCard({ chord }: { chord: Chord }) {
           className="text-7xl font-bold font-source-serif"
           style={{ color: "var(--color-primary)" }}
         >
-          {chord.name[0]}
+          {chord.family}
         </h2>
         <h2
           className="tracking-widest font-source-serif"
           style={{ color: "var(--color-muted)" }}
         >
-          {chord.name.slice(1).toUpperCase()}
+          {chord.name.slice(chord.family.length).trim().toUpperCase()}
         </h2>
       </div>
 
