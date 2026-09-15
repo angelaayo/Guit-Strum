@@ -14,7 +14,6 @@ export default function LiveMicStream({
   );
   const [errorMessage, setErrorMessage] = useState("");
   const [attempt, setAttempt] = useState(0);
-  const [lastConfidence, setLastConfidence] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -27,6 +26,7 @@ export default function LiveMicStream({
         // Create the AudioContext FIRST so we know the real sample rate
         // before opening the WebSocket connection.
         const audioContext = new AudioContext();
+        console.log("Browser sample rate:", audioContext.sampleRate);
         audioContextRef.current = audioContext;
 
         const ws = new WebSocket(
@@ -37,7 +37,6 @@ export default function LiveMicStream({
         ws.onmessage = (event) => {
           const data = JSON.parse(event.data);
           if (data.detectedChord) {
-            setLastConfidence(data.confidence);
             onPrediction(data.detectedChord, data.confidence);
           }
         };
@@ -127,18 +126,8 @@ export default function LiveMicStream({
   }
 
   return (
-    <div className="flex flex-col items-center gap-1">
-      <p className="font-inter text-sm" style={{ color: "var(--color-muted)" }}>
-        {status === "connecting" ? "Connecting..." : "Listening..."}
-      </p>
-      {status === "listening" && lastConfidence !== null && (
-        <p
-          className="font-inter text-xs"
-          style={{ color: "var(--color-muted)" }}
-        >
-          Last heard: {Math.round(lastConfidence * 100)}% confident
-        </p>
-      )}
-    </div>
+    <p className="font-inter text-sm" style={{ color: "var(--color-muted)" }}>
+      {status === "connecting" ? "Connecting..." : "Listening..."}
+    </p>
   );
 }

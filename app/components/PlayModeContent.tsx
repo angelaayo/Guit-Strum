@@ -45,6 +45,7 @@ export default function PlayModeContent({
   const [countdownValue, setCountdownValue] = useState(3);
   const [streak, setStreak] = useState(0);
   const { setInSession } = useGameSession();
+  const [lastConfidence, setLastConfidence] = useState<number | null>(null);
 
   useEffect(() => {
     setInSession(sessionStarted);
@@ -89,11 +90,13 @@ export default function PlayModeContent({
 
   function handlePrediction(detectedChord: string, confidence: number) {
     const isTarget = detectedChord === game.current.family;
+    setLastConfidence(isTarget ? confidence : null);
 
     if (isTarget && confidence >= CORRECT_CONFIDENCE_THRESHOLD) {
       recordAttempt(game.current.id, true);
       setScore((s) => s + 1);
       setStreak((s) => s + 1);
+      setLastConfidence(null);
       nextChord();
     } else if (confidence >= INCORRECT_CONFIDENCE_THRESHOLD) {
       setStreak(0);
@@ -128,6 +131,15 @@ export default function PlayModeContent({
                   key={`mic-${game.current.id}`}
                   onPrediction={handlePrediction}
                 />
+                {lastConfidence !== null && (
+                  <p
+                    className="font-inter text-xs"
+                    style={{ color: "var(--color-muted)" }}
+                  >
+                    {Math.round(lastConfidence * 100)}% close — keep going
+                  </p>
+                )}
+
                 <button
                   onClick={nextChord}
                   className="w-fit tracking-widest font-semibold border rounded-sm mt-4 font-source-serif px-8 py-2 shadow-md"

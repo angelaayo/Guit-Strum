@@ -15,14 +15,13 @@ import {
   DropdownMenuTrigger,
   DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
-import { useAuth, useGameSession, useSettings } from "@/app/lib/providers";
+import { useAuth, useGuardedNav, useSettings } from "@/app/lib/providers";
 
 const MainHeader = () => {
   const user = useAuth();
   const { handedness, setHandedness } = useSettings();
   const router = useRouter();
   const pathname = usePathname();
-  const { inSession } = useGameSession();
 
   async function handleLogout() {
     await fetch("/api/logout", { method: "POST" });
@@ -36,23 +35,18 @@ const MainHeader = () => {
     { href: "/", label: "Progress", show: true },
   ];
 
-  function guardedClick(e: React.MouseEvent) {
-    if (
-      inSession &&
-      !window.confirm(
-        "Leave this practice session? Your current round won't be saved.",
-      )
-    ) {
-      e.preventDefault();
-    }
-  }
+  const guardedClick = useGuardedNav();
 
   return (
     <div
       className="border-b-2 grid grid-cols-3 items-center p-3 font-source-serif"
       style={{ borderBottomColor: "var(--color-border)" }}
     >
-      <Link onClick={guardedClick} href="/" className="justify-self-start">
+      <Link
+        onClick={guardedClick}
+        href="/"
+        className="justify-self-start"
+      >
         <h2
           className="font-bold text-2xl"
           style={{ color: "var(--color-primary)" }}

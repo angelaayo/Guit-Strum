@@ -5,7 +5,8 @@ import {
   useContext,
   useEffect,
   useState,
-  ReactNode,
+  type ReactNode,
+  type MouseEvent,
 } from "react";
 
 type Handedness = "right" | "left";
@@ -49,6 +50,20 @@ export function useGameSession() {
   const ctx = useContext(GameSessionContext);
   if (!ctx) throw new Error("useGameSession must be used within Providers");
   return ctx;
+}
+
+export function useGuardedNav() {
+  const { inSession } = useGameSession();
+  return function guardedClick(e: MouseEvent<HTMLAnchorElement>) {
+    if (
+      inSession &&
+      !window.confirm(
+        "Leave this practice session? Your current round won't be saved.",
+      )
+    ) {
+      e.preventDefault();
+    }
+  };
 }
 
 const STORAGE_KEY = "guitstrum-settings";

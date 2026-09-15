@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Chord } from "@/app/generated/prisma/client";
 import LiveMicStream from "@/app/components/LiveMicStream";
 import { Mic } from "lucide-react";
@@ -9,6 +9,7 @@ import {
   CORRECT_CONFIDENCE_THRESHOLD,
   INCORRECT_CONFIDENCE_THRESHOLD,
 } from "../lib/recognition-config";
+import { useGameSession } from "@/app/lib/providers";
 
 export default function ChordPractice({ chord }: { chord: Chord }) {
   const [practicing, setPracticing] = useState(false);
@@ -16,9 +17,17 @@ export default function ChordPractice({ chord }: { chord: Chord }) {
     "idle",
   );
   const [streak, setStreak] = useState(0);
+  const { setInSession } = useGameSession();
+  const [lastConfidence, setLastConfidence] = useState<number | null>(null);
+
+  useEffect(() => {
+    setInSession(practicing);
+    return () => setInSession(false);
+  }, [practicing, setInSession]);
 
   function handlePrediction(detectedChord: string, confidence: number) {
     const isTarget = detectedChord === chord.family;
+    setLastConfidence(isTarget ? confidence : null);
 
     if (isTarget && confidence >= CORRECT_CONFIDENCE_THRESHOLD) {
       setFeedback("correct");
@@ -53,6 +62,15 @@ export default function ChordPractice({ chord }: { chord: Chord }) {
   return (
     <div className="flex flex-col items-center gap-3">
       <LiveMicStream key={chord.id} onPrediction={handlePrediction} />
+
+      {feedback !== "correct" && lastConfidence !== null && (
+        <p
+          className="font-inter text-xs"
+          style={{ color: "var(--color-muted)" }}
+        >
+          {Math.round(lastConfidence * 100)}% close — keep going
+        </p>
+      )}
 
       {feedback === "correct" && (
         <p
