@@ -33,7 +33,7 @@ export default async function HomePage() {
             className="font-inter text-sm mt-2"
             style={{ color: "var(--color-muted)" }}
           >
-            Here's where you left off.
+            Here&apos;s where you left off.
           </p>
         </div>
 
@@ -170,7 +170,7 @@ export default async function HomePage() {
             className="font-inter text-sm"
             style={{ color: "var(--color-muted)" }}
           >
-            Once you've got your chords down, GuitStrum will recommend real
+            Once you&apos;ve got your chords down, GuitStrum will recommend real
             songs built from the chords you already know.
           </p>
         </div>

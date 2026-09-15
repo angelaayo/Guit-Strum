@@ -23,12 +23,20 @@ export default function LiveMicStream({
       setErrorMessage("");
 
       try {
-        const ws = new WebSocket("ws://127.0.0.1:8000/ws/recognize");
+        // Create the AudioContext FIRST so we know the real sample rate
+        // before opening the WebSocket connection.
+        const audioContext = new AudioContext();
+        audioContextRef.current = audioContext;
+
+        const ws = new WebSocket(
+          `ws://127.0.0.1:8000/ws/recognize?sampleRate=${audioContext.sampleRate}`,
+        );
         wsRef.current = ws;
 
         ws.onmessage = (event) => {
           const data = JSON.parse(event.data);
-          if (data.detectedChord) onPrediction(data.detectedChord, data.confidence);
+          if (data.detectedChord)
+            onPrediction(data.detectedChord, data.confidence);
         };
 
         ws.onerror = () => {
@@ -47,9 +55,6 @@ export default function LiveMicStream({
         });
         if (cancelled) return;
 
-        const audioContext = new AudioContext();
-        console.log("AudioContext sample rate:", audioContext.sampleRate);
-        audioContextRef.current = audioContext;
         await audioContext.audioWorklet.addModule("/audio-processor.js");
         if (cancelled) return;
 
@@ -92,7 +97,7 @@ export default function LiveMicStream({
       wsRef.current?.close();
       audioContextRef.current?.close();
     };
-  }, [attempt]); // re-runs whenever "attempt" changes, i.e. when Retry is clicked
+  }, [attempt]);
 
   if (status === "error") {
     return (

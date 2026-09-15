@@ -1,7 +1,7 @@
 export function recordAttempt(chordId: string, correct: boolean) {
   fetch("/api/mastery", {
     method: "POST",
-    headers: { "Content-Type": "applications/json" },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ chordId, correct }),
   }).catch(() => {});
 }
