@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 export default function LiveMicStream({
   onPrediction,
 }: {
-  onPrediction: (chord: string) => void;
+  onPrediction: (chord: string, confidence: number) => void;
 }) {
   const wsRef = useRef<WebSocket | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -28,7 +28,7 @@ export default function LiveMicStream({
 
         ws.onmessage = (event) => {
           const data = JSON.parse(event.data);
-          if (data.detectedChord) onPrediction(data.detectedChord);
+          if (data.detectedChord) onPrediction(data.detectedChord, data.confidence);
         };
 
         ws.onerror = () => {

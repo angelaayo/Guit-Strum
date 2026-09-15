@@ -8,6 +8,7 @@ import LiveMicStream from "@/app/components/LiveMicStream";
 import GameHeader from "@/app/components/GameHeader";
 import GameFooter from "@/app/components/GameFooter";
 import { recordAttempt } from "../lib/record-attempt";
+import { CORRECT_CONFIDENCE_THRESHOLD, INCORRECT_CONFIDENCE_THRESHOLD } from "../lib/recognition-config";
 
 export default function PlayModeContent({
   modeChords,
@@ -44,13 +45,20 @@ export default function PlayModeContent({
     setCurrentChord((prev) => getRandomChord(modeChords, prev?.id));
   }
 
-  function handlePrediction(detectedChord: string) {
-    const correct = detectedChord === currentChord.family;
-    recordAttempt(currentChord.id, correct);
-    if (correct) {
+  function handlePrediction(detectedChord: string, confidence: number) {
+    const isTarget = detectedChord === currentChord.family;
+
+    if (isTarget && confidence >= CORRECT_CONFIDENCE_THRESHOLD) {
+      // confidently correct
+      recordAttempt(currentChord.id, true);
       setScore((s) => s + 1);
       nextChord();
+    } else if (confidence >= INCORRECT_CONFIDENCE_THRESHOLD) {
+      // confident enough to count as a genuine (wrong or too-uncertain) attempt
+      recordAttempt(currentChord.id, false);
     }
+    // anything below INCORRECT_CONFIDENCE_THRESHOLD never even arrives here —
+    // Python already filtered it out as noise
   }
 
   return (
