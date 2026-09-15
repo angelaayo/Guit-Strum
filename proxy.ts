@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-const PUBLIC_PATHS = ["/play", "/login", "/signup"];
+const PUBLIC_PATHS = ["/play", "/login", "/signup", "/", "/library"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;

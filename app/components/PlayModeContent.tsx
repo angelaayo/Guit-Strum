@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import type { Chord } from "@/app/generated/prisma/client";
 import { getRandomChord } from "@/app/lib/chords";
@@ -8,16 +7,39 @@ import LiveMicStream from "@/app/components/LiveMicStream";
 import GameHeader from "@/app/components/GameHeader";
 import GameFooter from "@/app/components/GameFooter";
 import { recordAttempt } from "../lib/record-attempt";
-import { CORRECT_CONFIDENCE_THRESHOLD, INCORRECT_CONFIDENCE_THRESHOLD } from "../lib/recognition-config";
+import {
+  CORRECT_CONFIDENCE_THRESHOLD,
+  INCORRECT_CONFIDENCE_THRESHOLD,
+} from "../lib/recognition-config";
+
+const QUEUE_SIZE = 3;
+
+function pickUnique(pool: Chord[], excludeIds: Set<string>): Chord {
+  const options = pool.filter((c) => !excludeIds.has(c.id));
+  const source = options.length ? options : pool; // fallback if pool is too small to avoid all repeats
+  return source[Math.floor(Math.random() * source.length)];
+}
+
+function buildQueue(pool: Chord[], currentId: string): Chord[] {
+  const used = new Set([currentId]);
+  const queue: Chord[] = [];
+  for (let i = 0; i < QUEUE_SIZE; i++) {
+    const next = pickUnique(pool, used);
+    queue.push(next);
+    used.add(next.id);
+  }
+  return queue;
+}
 
 export default function PlayModeContent({
   modeChords,
 }: {
   modeChords: Chord[];
 }) {
-  const [currentChord, setCurrentChord] = useState<Chord>(() =>
-    getRandomChord(modeChords),
-  );
+  const [game, setGame] = useState(() => {
+    const current = getRandomChord(modeChords);
+    return { current, queue: buildQueue(modeChords, current.id) };
+  });
   const [score, setScore] = useState(0);
   const [sessionStarted, setSessionStarted] = useState(false);
   const [countdownValue, setCountdownValue] = useState(3);
@@ -39,26 +61,27 @@ export default function PlayModeContent({
     return () => {
       cancelled = true;
     };
-  }, []); // runs once for the whole session, not per-chord
+  }, []);
 
   function nextChord() {
-    setCurrentChord((prev) => getRandomChord(modeChords, prev?.id));
+    setGame((prev) => {
+      const [next, ...rest] = prev.queue;
+      const used = new Set([next.id, ...rest.map((c) => c.id)]);
+      const newlyQueued = pickUnique(modeChords, used);
+      return { current: next, queue: [...rest, newlyQueued] };
+    });
   }
 
   function handlePrediction(detectedChord: string, confidence: number) {
-    const isTarget = detectedChord === currentChord.family;
+    const isTarget = detectedChord === game.current.family;
 
     if (isTarget && confidence >= CORRECT_CONFIDENCE_THRESHOLD) {
-      // confidently correct
-      recordAttempt(currentChord.id, true);
+      recordAttempt(game.current.id, true);
       setScore((s) => s + 1);
       nextChord();
     } else if (confidence >= INCORRECT_CONFIDENCE_THRESHOLD) {
-      // confident enough to count as a genuine (wrong or too-uncertain) attempt
-      recordAttempt(currentChord.id, false);
+      recordAttempt(game.current.id, false);
     }
-    // anything below INCORRECT_CONFIDENCE_THRESHOLD never even arrives here —
-    // Python already filtered it out as noise
   }
 
   return (
@@ -66,7 +89,7 @@ export default function PlayModeContent({
       <GameHeader currentScore={score} />
       <main className="flex-1 mt-16">
         <div className="flex">
-          <div className="flex-1 flex justify-center">Notes</div>
+          <div className="flex-1" />
 
           <div className="flex-1 flex flex-col items-center gap-4">
             {!sessionStarted ? (
@@ -81,11 +104,11 @@ export default function PlayModeContent({
             ) : (
               <div className="flex flex-col justify-center items-center">
                 <ChordCard
-                  key={`card-${currentChord.id}`}
-                  chord={currentChord}
+                  key={`card-${game.current.id}`}
+                  chord={game.current}
                 />
                 <LiveMicStream
-                  key={`mic-${currentChord.id}`}
+                  key={`mic-${game.current.id}`}
                   onPrediction={handlePrediction}
                 />
                 <button
@@ -103,7 +126,34 @@ export default function PlayModeContent({
             )}
           </div>
 
-          <div className="flex-1 flex justify-center">Queue</div>
+          <div className="flex-1 flex flex-col items-center gap-3 pt-8">
+            {sessionStarted && (
+              <>
+                <h3
+                  className="font-source-serif font-semibold text-sm uppercase tracking-wide"
+                  style={{ color: "var(--color-muted)" }}
+                >
+                  Up Next
+                </h3>
+                {game.queue.map((chord, i) => (
+                  <div
+                    key={chord.id}
+                    className="rounded-xl border px-5 py-2 font-source-serif font-semibold"
+                    style={{
+                      backgroundColor: "var(--color-card-bg)",
+                      borderColor: "var(--color-border)",
+                      color:
+                        i === 0 ? "var(--color-primary)" : "var(--color-muted)",
+                      fontSize: i === 0 ? "1.1rem" : "0.95rem",
+                      opacity: 1 - i * 0.2,
+                    }}
+                  >
+                    {chord.name}
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
         </div>
       </main>
 

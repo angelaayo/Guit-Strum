@@ -9,10 +9,21 @@ import {
 import MainHeader from "@/app/components/MainHeader";
 import ChordDiagram from "@/app/components/ChordDiagram";
 import ProgressBar from "@/app/components/ProgressBar";
+import LockedFeature from "@/app/components/LockedFeature";
 
 export default async function HomePage() {
   const user = await getCurrentUser();
-  if (!user) return null; // proxy.ts already redirects unauthenticated visitors before this ever renders
+  if (!user) {
+    return (
+      <div>
+        <MainHeader />
+        <LockedFeature
+          title="Your progress is waiting"
+          description="Create an account to track which chords you've mastered, get personalized practice recommendations, and pick up right where you left off."
+        />
+      </div>
+    );
+  }
 
   const chords = await getUserProgress(user.id);
   const recommended = getRecommendedChord(chords);

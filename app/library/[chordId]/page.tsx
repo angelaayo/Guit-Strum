@@ -6,6 +6,7 @@ import { getCurrentUser } from "@/app/lib/auth";
 import ChordDiagram from "@/app/components/ChordDiagram";
 import ChordPractice from "@/app/components/ChordPractice";
 import MainHeader from "@/app/components/MainHeader";
+import LockedFeature from "@/app/components/LockedFeature";
 
 export default async function ChordDetailPage({
   params,
@@ -13,10 +14,22 @@ export default async function ChordDetailPage({
   params: Promise<{ chordId: string }>;
 }) {
   const { chordId } = await params;
+
+  const user = await getCurrentUser();
+  if (!user) {
+    return (
+      <div>
+        <MainHeader />
+        <LockedFeature
+          title="Chord Details"
+          description="Sign in to view this chord's diagram, tips, and practice it live."
+        />
+      </div>
+    );
+  }
   const chord = await getChordById(chordId);
   if (!chord) return notFound();
 
-  const user = await getCurrentUser();
   const mastery = user ? await getMasteryForUser(user.id, chord.id) : null;
   const tips = chordTips[chord.id];
 

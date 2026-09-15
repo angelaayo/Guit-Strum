@@ -1,9 +1,24 @@
 import { getAllChords } from "@/app/lib/chord-queries";
 import LibraryGrid from "@/app/components/LibraryGrid";
 import MainHeader from "@/app/components/MainHeader";
+import { getCurrentUser } from "../lib/auth";
+import LockedFeature from "@/app/components/LockedFeature";
 
 export default async function LibraryPage() {
   const chords = await getAllChords();
+  const user = await getCurrentUser();
+
+  if (!user) {
+    return (
+      <div>
+        <MainHeader />
+        <LockedFeature
+          title="Chord Library"
+          description="Sign in to browse every chord shape in detail and practice them one at a time."
+        />
+      </div>
+    );
+  }
 
   return (
     <div>
