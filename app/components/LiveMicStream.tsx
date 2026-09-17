@@ -55,6 +55,8 @@ export default function LiveMicStream({
             autoGainControl: false,
           },
         });
+        // const track = stream.getAudioTracks()[0];
+        // // console.log("Using microphone:", track.label, track.getSettings());
         if (cancelled) return;
 
         await audioContext.audioWorklet.addModule("/audio-processor.js");
