@@ -14,6 +14,8 @@ export default function LiveMicStream({
   );
   const [errorMessage, setErrorMessage] = useState("");
   const [attempt, setAttempt] = useState(0);
+  const RECOGNIZER_WS_URL =
+    process.env.NEXT_PUBLIC_RECOGNIZER_WS_URL ?? "ws://127.0.0.1:8000";
 
   useEffect(() => {
     let cancelled = false;
@@ -30,7 +32,7 @@ export default function LiveMicStream({
         audioContextRef.current = audioContext;
 
         const ws = new WebSocket(
-          `ws://127.0.0.1:8000/ws/recognize?sampleRate=${audioContext.sampleRate}`,
+          `${RECOGNIZER_WS_URL}/ws/recognize?sampleRate=${audioContext.sampleRate}`,
         );
         wsRef.current = ws;
 
@@ -55,8 +57,6 @@ export default function LiveMicStream({
             autoGainControl: false,
           },
         });
-        // const track = stream.getAudioTracks()[0];
-        // // console.log("Using microphone:", track.label, track.getSettings());
         if (cancelled) return;
 
         await audioContext.audioWorklet.addModule("/audio-processor.js");
