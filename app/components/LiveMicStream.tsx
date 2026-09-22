@@ -28,7 +28,7 @@ export default function LiveMicStream({
         // Create the AudioContext FIRST so we know the real sample rate
         // before opening the WebSocket connection.
         const audioContext = new AudioContext();
-        console.log("Browser sample rate:", audioContext.sampleRate);
+        // console.log("Browser sample rate:", audioContext.sampleRate);
         audioContextRef.current = audioContext;
 
         const ws = new WebSocket(
