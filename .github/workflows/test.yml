@@ -31,3 +31,17 @@ jobs:
         env:
           DATABASE_URL: postgresql://fake:fake@localhost:5432/fake
           JWT_SECRET: fake-ci-secret-not-real
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Next.js app image
+        run: docker build -t guitstrum-app .
+
+      - name: Build recognizer image
+        run: docker build -t guitstrum-recognizer ./guitstrum-recognizer
