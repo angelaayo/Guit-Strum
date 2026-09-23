@@ -46,4 +46,4 @@ jobs:
         run: docker build -t guitstrum-app .
 
       - name: Build recognizer image
-        run: docker build -t guitstrum-recognizer ./guitstrum-recognizer
+        run: docker build -t guitstrum-recognizer ../guitstrum-recognizer

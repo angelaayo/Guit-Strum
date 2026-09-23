@@ -113,7 +113,7 @@ async function main() {
     });
   }
 
-  console.log(`Seeded ${chords.length} chords.`);
+  // console.log(`Seeded ${chords.length} chords.`);
 }
 
 main()
