@@ -12,6 +12,8 @@ ARG DATABASE_URL="postgresql://placeholder:placeholder@localhost:5432/placeholde
 ENV DATABASE_URL=$DATABASE_URL
 
 RUN npx prisma generate
+ARG NEXT_PUBLIC_RECOGNIZER_WS_URL
+ENV NEXT_PUBLIC_RECOGNIZER_WS_URL=$NEXT_PUBLIC_RECOGNIZER_WS_URL
 RUN npm run build
 
 FROM node:20-alpine AS runner
