@@ -18,11 +18,14 @@ RUN npm run build
 
 FROM node:20-alpine AS runner
 WORKDIR /app
+COPY --from=builder /app/certs/us-east-2-bundle.pem /app/certs/us-east-2-bundle.pem
 ENV NODE_ENV=production
+ENV NODE_EXTRA_CA_CERTS=/app/certs/us-east-2-bundle.pem
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+
 
 EXPOSE 3000
 CMD ["node", "server.js"]
