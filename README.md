@@ -1,3 +1,5 @@
+[Try the live app](https://gu-6216f5deb5754fe99797869c08258921.ecs.us-east-2.on.aws/play)
+
 GuitStrum 🎸
 
 A web app that helps guitar players practice chords through a real-time recognition game — play a chord on a real guitar, and a trained ML model listens through your browser's microphone and tells you if you got it right.
