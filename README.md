@@ -2,6 +2,13 @@
 
 GuitStrum 🎸
 
+Demo:
+
+<img width="1223" height="669" alt="Screenshot 2026-10-10 214349" src="https://github.com/user-attachments/assets/0b23b009-4447-40b0-83aa-69367e715b86" />
+<img width="1070" height="756" alt="Screenshot 2026-10-10 214329" src="https://github.com/user-attachments/assets/db223f4b-dac9-4a4e-bd65-c6801ea8d797" />
+<img width="1249" height="637" alt="Screenshot 2026-10-10 214318" src="https://github.com/user-attachments/assets/8a008831-e181-442e-b2a4-052a85f1141f" />
+
+
 A web app that helps guitar players practice chords through a real-time recognition game — play a chord on a real guitar, and a trained ML model listens through your browser's microphone and tells you if you got it right.
 
 Status: actively in development. Core chord recognition pipeline is live and working end-to-end (browser mic → live audio stream → ML classification → real-time feedback). Cloud deployment, chord library UI, and account/progress tracking are in progress.
