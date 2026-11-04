@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# installed agent skills (regenerable from skills-lock.json via `npx neon skills`)
+/.claude/skills
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
