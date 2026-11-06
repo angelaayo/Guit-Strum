@@ -1,4 +1,4 @@
-[Try the live app](https://gu-6216f5deb5754fe99797869c08258921.ecs.us-east-2.on.aws/play)
+[Try the live app](https://guit-strum.vercel.app/play)
 
 GuitStrum 🎸
 
