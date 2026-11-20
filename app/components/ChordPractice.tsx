@@ -5,10 +5,8 @@ import type { Chord } from "@/app/generated/prisma/client";
 import LiveMicStream from "@/app/components/LiveMicStream";
 import { Mic } from "lucide-react";
 import { recordAttempt } from "../lib/record-attempt";
-import {
-  CORRECT_CONFIDENCE_THRESHOLD,
-  INCORRECT_CONFIDENCE_THRESHOLD,
-} from "../lib/recognition-config";
+import { CORRECT_CONFIDENCE_THRESHOLD } from "../lib/recognition-config";
+import { matchChord } from "../lib/chord-match";
 import { useGameSession } from "@/app/lib/providers";
 
 export default function ChordPractice({ chord }: { chord: Chord }) {
@@ -25,15 +23,15 @@ export default function ChordPractice({ chord }: { chord: Chord }) {
     return () => setInSession(false);
   }, [practicing, setInSession]);
 
-  function handlePrediction(detectedChord: string, confidence: number) {
-    const isTarget = detectedChord === chord.family;
-    setLastConfidence(isTarget ? confidence : null);
+  function handlePrediction(notes: number[]) {
+    const { score } = matchChord(notes, chord.frets);
+    setLastConfidence(score);
 
-    if (isTarget && confidence >= CORRECT_CONFIDENCE_THRESHOLD) {
+    if (score >= CORRECT_CONFIDENCE_THRESHOLD) {
       setFeedback("correct");
       setStreak((s) => s + 1);
       recordAttempt(chord.id, true);
-    } else if (confidence >= INCORRECT_CONFIDENCE_THRESHOLD) {
+    } else {
       setStreak(0);
       recordAttempt(chord.id, false);
       setFeedback("incorrect");

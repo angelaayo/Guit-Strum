@@ -68,17 +68,19 @@ describe("LiveMicStream", () => {
     expect(ws.sent.length).toBe(1);
   });
 
-  it("calls onPrediction when the server sends a detected chord", async () => {
+  it("calls onPrediction with the notes array when the server sends notes", async () => {
     const onPrediction = vi.fn();
     render(<LiveMicStream onPrediction={onPrediction} />);
     await waitFor(() => expect(FakeWebSocket.instances.length).toBe(1));
 
     const ws = FakeWebSocket.instances[0];
+    const notes = new Array(88).fill(0);
+    notes[27] = 0.9;
     ws.onmessage?.({
-      data: JSON.stringify({ detectedChord: "G", confidence: 0.9 }),
+      data: JSON.stringify({ notes }),
     });
 
-    expect(onPrediction).toHaveBeenCalledWith("G", 0.9);
+    expect(onPrediction).toHaveBeenCalledWith(notes);
   });
 
   it("shows a retry button when the microphone is denied", async () => {

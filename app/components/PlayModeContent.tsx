@@ -6,10 +6,8 @@ import ChordCard from "@/app/components/ChordCard";
 import LiveMicStream from "@/app/components/LiveMicStream";
 import GameHeader from "@/app/components/GameHeader";
 import { recordAttempt } from "../lib/record-attempt";
-import {
-  CORRECT_CONFIDENCE_THRESHOLD,
-  INCORRECT_CONFIDENCE_THRESHOLD,
-} from "../lib/recognition-config";
+import { CORRECT_CONFIDENCE_THRESHOLD } from "../lib/recognition-config";
+import { matchChord } from "../lib/chord-match";
 import { useGameSession } from "../lib/providers";
 
 const QUEUE_SIZE = 3;
@@ -88,17 +86,17 @@ export default function PlayModeContent({
     });
   }
 
-  function handlePrediction(detectedChord: string, confidence: number) {
-    const isTarget = detectedChord === game.current.family;
-    setLastConfidence(isTarget ? confidence : null);
+  function handlePrediction(notes: number[]) {
+    const { score } = matchChord(notes, game.current.frets);
+    setLastConfidence(score);
 
-    if (isTarget && confidence >= CORRECT_CONFIDENCE_THRESHOLD) {
+    if (score >= CORRECT_CONFIDENCE_THRESHOLD) {
       recordAttempt(game.current.id, true);
       setScore((s) => s + 1);
       setStreak((s) => s + 1);
       setLastConfidence(null);
       nextChord();
-    } else if (confidence >= INCORRECT_CONFIDENCE_THRESHOLD) {
+    } else {
       setStreak(0);
       recordAttempt(game.current.id, false);
     }
