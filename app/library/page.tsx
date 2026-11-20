@@ -22,23 +22,58 @@ export default async function LibraryPage() {
   return (
     <div>
       <MainHeader />
-      <div className="min-h-screen w-full flex flex-col items-center px-4 py-12 gap-10">
-        <div className="text-center max-w-md">
-          <h1
-            className="font-source-serif font-semibold text-3xl mb-2"
-            style={{ color: "var(--color-primary)" }}
-          >
-            Chord Library
-          </h1>
-          <p
-            className="font-inter text-sm"
-            style={{ color: "var(--color-muted)" }}
-          >
-            Browse every chord shape, or tap one to practice it on its own.
-          </p>
-        </div>
+      <div className="min-h-screen w-full px-6 py-12">
+        <div className="mx-auto max-w-6xl flex flex-col gap-8">
+          <header>
+            <p
+              className="font-inter text-xs uppercase tracking-[0.2em] mb-3"
+              style={{ color: "var(--color-muted)" }}
+            >
+              A little practice, every day
+            </p>
+            <h1
+              className="font-source-serif font-semibold text-5xl mb-3"
+              style={{ color: "var(--color-string)" }}
+            >
+              Chord Library
+            </h1>
+            <p
+              className="font-inter text-base"
+              style={{ color: "var(--color-muted)" }}
+            >
+              Browse every chord shape, or tap one to practice it on its own.
+            </p>
+          </header>
 
-        <LibraryGrid chords={chords} />
+          <LibraryGrid chords={chords} />
+
+          <footer
+            className="mt-2 pt-6 border-t flex flex-wrap items-center gap-x-6 gap-y-2"
+            style={{ borderColor: "var(--color-border)" }}
+          >
+            <span
+              className="font-inter text-sm font-semibold"
+              style={{ color: "var(--color-string)" }}
+            >
+              Reading a chord
+            </span>
+            <span className="font-inter text-sm" style={{ color: "var(--color-muted)" }}>
+              ○ Open string
+            </span>
+            <span className="font-inter text-sm" style={{ color: "var(--color-muted)" }}>
+              ✕ Muted string
+            </span>
+            <span className="font-inter text-sm" style={{ color: "var(--color-muted)" }}>
+              1–4 Finger placement
+            </span>
+            <span
+              className="font-inter text-sm italic ml-auto"
+              style={{ color: "var(--color-muted)" }}
+            >
+              One shape at a time. Make it yours.
+            </span>
+          </footer>
+        </div>
       </div>
     </div>
   );

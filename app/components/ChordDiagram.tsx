@@ -2,7 +2,13 @@
 import type { Chord } from "@/app/generated/prisma/client";
 import { useSettings } from "@/app/lib/providers";
 
-export default function ChordDiagram({ chord }: { chord: Chord }) {
+export default function ChordDiagram({
+  chord,
+  className = "w-70 h-80",
+}: {
+  chord: Chord;
+  className?: string;
+}) {
   const { handedness } = useSettings();
   const { frets, isBarre, barreFret, barreStart, barreEnd } = chord;
   const stringSpacing = 26;
@@ -26,13 +32,12 @@ export default function ChordDiagram({ chord }: { chord: Chord }) {
 
   // content spans roughly this box — tune viewBox to match, not an arbitrary 200x200
   const contentWidth = startX * 2 + 5 * stringSpacing;
-  const contentHeight = startY + 4 * fretSpacing + 12; // +12 bottom breathing room
+  const contentHeight = startY + 4 * fretSpacing + 24; // room for string labels
 
   return (
     <svg
       viewBox={`0 0 ${contentWidth} ${contentHeight}`}
-      className="w-70 h-80"
-      style={{ backgroundColor: "var(--color-bg)" }}
+      className={className}
     >
       <g
         style={
@@ -119,6 +124,21 @@ export default function ChordDiagram({ chord }: { chord: Chord }) {
           return null;
         })}
       </g>
+      {(handedness === "left"
+        ? [...["E", "A", "D", "G", "B", "e"]].reverse()
+        : ["E", "A", "D", "G", "B", "e"]
+      ).map((name, i) => (
+        <text
+          key={i}
+          x={startX + i * stringSpacing}
+          y={startY + 4 * fretSpacing + 16}
+          fontSize="9"
+          textAnchor="middle"
+          fill="var(--color-muted)"
+        >
+          {name}
+        </text>
+      ))}
     </svg>
   );
 }
